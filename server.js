@@ -12,6 +12,9 @@ const attendanceRoutes = require("./routes/attendanceRoutes");
 const marksRoutes = require("./routes/marksRoutes");
 const resultRoutes = require("./routes/resultRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const feeRoutes = require("./routes/feeRoutes");
+const teacherRoutes = require("./routes/teacherRoutes");
+const path = require("path");
 
 const app = express();
 
@@ -44,6 +47,15 @@ app.use("/api/marks", marksRoutes);
 app.use("/api/result", resultRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use("/api/fees", feeRoutes);
+
+app.use("/api/teachers", teacherRoutes);
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
 
 // ======================
 // Test Route

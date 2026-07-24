@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const marksSchema = new mongoose.Schema(
+const resultSchema = new mongoose.Schema(
   {
     student: {
       type: mongoose.Schema.Types.ObjectId,
@@ -18,10 +18,30 @@ const marksSchema = new mongoose.Schema(
       required: true,
     },
 
-    subject: {
+    totalMarks: {
+      type: Number,
+      required: true,
+    },
+
+    obtainedMarks: {
+      type: Number,
+      required: true,
+    },
+
+    percentage: {
+      type: Number,
+      required: true,
+    },
+
+    grade: {
       type: String,
       required: true,
-      trim: true,
+    },
+
+    result: {
+      type: String,
+      enum: ["PASS", "FAIL"],
+      default: "PASS",
     },
 
     examType: {
@@ -29,17 +49,10 @@ const marksSchema = new mongoose.Schema(
       enum: ["Mid Semester", "End Semester"],
       default: "Mid Semester",
     },
-
-    marks: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 100,
-    },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("Marks", marksSchema);
+module.exports = mongoose.model("Result", resultSchema);

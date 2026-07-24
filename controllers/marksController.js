@@ -6,13 +6,53 @@ const Marks = require("../models/Marks");
 // ==========================
 
 const saveMarks = async (req, res) => {
+
   try {
 
-    const marks = await Marks.create(req.body);
+    const {
+      student,
+      course,
+      semester,
+      subject,
+      examType,
+      marks,
+    } = req.body;
+
+    const existing = await Marks.findOne({
+      student,
+      subject,
+      examType,
+    });
+
+    if (existing) {
+
+      existing.course = course;
+      existing.semester = semester;
+      existing.marks = marks;
+
+      await existing.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Marks Updated Successfully",
+        data: existing,
+      });
+
+    }
+
+    const newMarks = await Marks.create({
+      student,
+      course,
+      semester,
+      subject,
+      examType,
+      marks,
+    });
 
     res.status(201).json({
       success: true,
-      data: marks,
+      message: "Marks Saved Successfully",
+      data: newMarks,
     });
 
   } catch (err) {
@@ -23,6 +63,7 @@ const saveMarks = async (req, res) => {
     });
 
   }
+
 };
 
 

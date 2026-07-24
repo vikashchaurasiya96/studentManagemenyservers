@@ -39,6 +39,66 @@ const saveAttendance = async (req, res) => {
   }
 };
 
+const getStudentAttendance = async (req, res) => {
+
+  try {
+
+    const attendance = await Attendance.find({
+      student: req.params.studentId,
+    }).sort({ date: -1 });
+
+    res.json({
+      success: true,
+      data: attendance,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+
+};
+
+const getAttendancePercentage = async (req, res) => {
+
+  try {
+
+    const total = await Attendance.countDocuments({
+      student: req.params.studentId,
+    });
+
+    const present = await Attendance.countDocuments({
+      student: req.params.studentId,
+      status: "Present",
+    });
+
+    const percentage =
+      total === 0 ? 0 : ((present / total) * 100).toFixed(2);
+
+    res.json({
+      success: true,
+      total,
+      present,
+      percentage,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+
+};
+
+
+
 const getAttendance = async (req, res) => {
   try {
 
@@ -85,4 +145,6 @@ module.exports = {
   saveAttendance,
   getAttendance,
   getAttendanceByDate,
+  getStudentAttendance,
+  getAttendancePercentage,
 };
